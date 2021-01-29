@@ -15,22 +15,20 @@ serv_tcpsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 serv_tcpsock.bind((TCP_IP,TCP_PORT))
 serv_tcpsock.listen(5)
 conn,addr = serv_tcpsock.accept()
-data = conn.recv(1024)
-producer.send('first_topic', data)
-producer.flush()
-while True:
-    try:
 
-        if (data == b"quit"):
-            producer.send('first_topic',data)
-            producer.flush()
-            serv_tcpsock.close()
-            exit()
+
+while True:
+
+    try:
+        data = conn.recv(1024)
         if (data == b"") or (b'empty' in data):
             continue
         print(data)
-
-
+        producer.send('first_topic', data)
+        producer.flush()
+        if (data == b"quit"):
+           serv_tcpsock.close()
+           exit()
     except KeyboardInterrupt:
         serv_tcpsock.close()
         exit()
