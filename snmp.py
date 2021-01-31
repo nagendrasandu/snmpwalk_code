@@ -1,4 +1,5 @@
 """
+
 a function to display device info using snmpwalk
 """
 

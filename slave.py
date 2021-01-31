@@ -5,6 +5,9 @@ and sends to server on tcp port 8768
 import sys
 import socket
 from time import sleep
+import logger
+
+log=logger.snmp_logger('slave')
 
 UDP_IP = "localhost"
 UDP_PORT = 5678
@@ -28,7 +31,7 @@ while True:
             exit()
         if (data == b"") or (b'empty' in data):
             continue
-        print("Received message:  ",data)
+        log.info("Received message %s:  "%(data))
 
         clt_tcpsock.send(data)
 

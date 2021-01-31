@@ -6,11 +6,14 @@ author:     sandu nagendra.<nagendra.s@tessrac.com>
 import re
 
 import pymysql
+import logger
 from kafka import KafkaConsumer
+
+log=logger.snmp_logger('snmp_consumer')
 
 consumer = KafkaConsumer('first_topic',
                          bootstrap_servers=['localhost:9092'],
-                         enable_auto_commit=True)
+                         auto_offset_reset='latest',enable_auto_commit=True)
 
 
 def save_info(device_oid, hostname, device_OS, OS_type, OS_bit_version):
@@ -37,7 +40,7 @@ def save_info(device_oid, hostname, device_OS, OS_type, OS_bit_version):
 
         # Commit your changes in the database
         db.commit()
-        print('successfully saved')
+        log.info('successfully saved')
     except:
         # Rollback in case there is any error
         db.rollback()
@@ -64,15 +67,15 @@ def parse(message):
 
             save_info(device_oid,hostname,device_OS,OS_type,OS_bit_version) #calling save_info function with params
         else:
-            print('message is empty')
+            log.info('message is empty')
     except Exception as e:
-        print(e)
+        log.info(e)
 try:
     for message in consumer:
         if message.value == b"quit":
             print("Message Transfer Completed")
             exit()
-        print(message)
+        # log.info(message)
         parse(str(message))
 except KeyboardInterrupt:
     exit()

@@ -5,7 +5,8 @@ This server reveives the snmp trap data through TCP port
 import socket
 from time import sleep
 from kafka import KafkaProducer
-
+import logger
+log=logger.snmp_logger('snmp_server')
 producer = KafkaProducer(bootstrap_servers =['localhost:9092'])
 
 TCP_IP = "localhost"
@@ -23,7 +24,7 @@ while True:
         data = conn.recv(1024)
         if (data == b"") or (b'empty' in data):
             continue
-        print(data)
+        log.info(data)
         producer.send('first_topic', data)
         producer.flush()
         if (data == b"quit"):
