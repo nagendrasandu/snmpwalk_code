@@ -8,7 +8,7 @@ def snmp_logger(name):
     # create formatter
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    # create console handler and set level to debug
+    # create console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
 
@@ -18,7 +18,7 @@ def snmp_logger(name):
     # add ch to logger
     logger.addHandler(ch)
 
-    file_handler=logging.FileHandler('log/snmp_log.txt')  #writing log activity to a file
+    file_handler=logging.FileHandler('log/snmp_log.txt')  # creating file handler writing log activity to a file
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
